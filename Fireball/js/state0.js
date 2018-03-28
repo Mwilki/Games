@@ -1,17 +1,44 @@
 var demo = {};
+// fields that represent middle-point of game world
+var centerX = 1500 / 2;
+var centerY = 1000 / 2;
+var speed = 5;
+
+// initialize player
+var zordo;
 
 demo.state0 = function(){};
 demo.state0.prototype = {
-    preload: function(){},
+    preload: function(){
+        game.load.image('zordo', 'assets/Sprites/Zordo.png');
+    },
     create: function(){
-        game.stage.backgroundColor = "#f2f2f2";
-        console.log('state0');
-        
         // event listeners are local to the state they're in.
         addChangeStateEventListeners();
-
+        
+        // scaling manager
+        game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+        
+        // initialize zordo into the world.
+        zordo = game.add.sprite(centerX, centerY, 'zordo');
+        // anchor x/y of the image to the center, not the top left.
+        zordo.anchor.setTo(0.5, 0.5);
     },
-    update: function(){}
+    update: function(){
+        if(game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)){
+            zordo.x += speed;
+        }
+        else if(game.input.keyboard.isDown(Phaser.Keyboard.LEFT)){
+            zordo.x -= speed;
+        }
+        
+        if(game.input.keyboard.isDown(Phaser.Keyboard.UP)){
+            zordo.y -= speed;
+        }
+        else if(game.input.keyboard.isDown(Phaser.Keyboard.DOWN)){
+            zordo.y += speed;
+        }
+    }
 };
 
 
