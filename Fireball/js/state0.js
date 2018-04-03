@@ -3,8 +3,6 @@ var demo = {};
 var centerX = 1500 / 2;
 var centerY = 1000 / 2;
 var speed = 5;
-
-// initialize player
 var zordo;
 var gooblin;
 
@@ -12,7 +10,7 @@ demo.state0 = function(){};
 demo.state0.prototype = {
     preload: function(){
         game.load.spritesheet('zordo', 'assets/Sprites/ZordoSpritesheet.png', 126, 162);
-        game.load.image('sky', 'assets/Haydrool.png');
+        game.load.image('sky', 'assets/levels/1-1.png');
         game.load.image('gooblin', 'assets/Sprites/Gooblin.png');
     },
     create: function(){
@@ -57,22 +55,9 @@ demo.state0.prototype = {
     update: function(){
         
 
-while (gooblin.y !== zordo.y && gooblin.x !== zordo.x){
-    if (gooblin.y >= zordo.y){
-        gooblin.y -= speed;
-    } else {
-        gooblin.y += speed;
-    }
-    
-    if (gooblin.x >= zordo.x){
-        gooblin.x -= speed;
-    } else {
-        gooblin.x += speed;
-    }
-
-}
-
-        
+        if (zordo.x >= 2900){
+            game.state.start('state1');
+        }
         
         if(game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)){
         zordo.animations.play('walk', 20, true);
