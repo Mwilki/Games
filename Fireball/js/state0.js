@@ -5,6 +5,7 @@ var centerY = 1000 / 2;
 var speed = 5;
 var zordo;
 var gooblin;
+var hearts = 3;
 
 demo.state0 = function(){};
 demo.state0.prototype = {
@@ -12,24 +13,27 @@ demo.state0.prototype = {
         game.load.spritesheet('zordo', 'assets/Sprites/ZordoFightsheet.png', 125, 138);
         game.load.image('sky', 'assets/levels/1-1.png');
         game.load.image('gooblin', 'assets/Sprites/Gooblin.png');
+        game.load.image('heart', 'assets/Sprites/Heart.png');
+        game.load.image('sword', 'assets/Sprites/Sword.png');
     },
     create: function(){
-        
         // initialize the game physics engine
         game.physics.startSystem(Phaser.Physics.ARCADE);
+        
         // locally scoped background variable
-        var sky = game.add.sprite(0, 0, 'sky');
+        var sky = game.add.sprite(0, 0, 'sky'); // possible parallax?
+        
         // event listeners are local to the state they're in.
         addChangeStateEventListeners();
         
         // scaling manager
         game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
         
-        // initialize gooblin into the world (TESTING)
-//        gooblin = game.add.sprite(centerX + 100, centerY + 100, 'gooblin');
-//        gooblin = game.add.sprite(centerX - 100, centerY - 100, 'gooblin');
-        // initialize zordo into the world.
-        zordo = game.add.sprite(centerX, centerY, 'zordo');
+
+        
+
+        //zordo
+        zordo = game.add.sprite(centerX - 550, centerY, 'zordo');
         zordo.animations.add('walk', [0, 1, 2, 3, 4, 5, 6]);
         // anchor x/y of the image to the center, not the top left.
         zordo.anchor.setTo(0.5, 0.5);
@@ -38,11 +42,17 @@ demo.state0.prototype = {
         game.physics.enable(zordo);
         zordo.body.collideWorldBounds = true;
         
-        gooblin = game.add.sprite(centerX + zordo.x, centerY - 350, 'gooblin');
-        game.physics.enable(gooblin, Phaser.Physics.ARCADE);
-        gooblin.collideWorldBounds = true;
-        gooblin.enableBody = true;
-
+        hearts = game.add.group();
+        
+        //zordo's evil hearts
+//        for(var i = 0; i < 3; i++){
+//            for (var j = 0; j < 3; j++){
+//                var temp = game.add.sprite(zordo.x - 150 + (i * 115), zordo.y - 250 + (j * 115), 'heart');
+//                temp.scale.setTo(0.4, 0.4);
+//                hearts.add(temp);  
+//            } 
+//        }
+        
         
         // initialize the game bounds
         game.world.setBounds(0, 0, 3000, 1000);
@@ -54,6 +64,11 @@ demo.state0.prototype = {
     },
     update: function(){
         
+        if (zordo.x >= 1905 && zordo.x <= 2280){
+            if (zordo.y <= 395){
+                game.state.start('state3');
+            }
+        }
 
         if (zordo.x >= 2900){
             game.state.start('state1');
@@ -64,12 +79,20 @@ demo.state0.prototype = {
         zordo.animations.currentAnim.speed = 5;
             zordo.scale.setTo(0.7, 0.7);
             zordo.x += speed;
+            
+            if (zordo.x >= 1050){
+                hearts.x += speed;   
+            }
         }
         else if(game.input.keyboard.isDown(Phaser.Keyboard.LEFT)){
             zordo.animations.play('walk', 20, true);
             zordo.animations.currentAnim.speed = 5;
             zordo.scale.setTo(-0.7, 0.7);
             zordo.x -= speed;
+            
+            if (zordo.x <= 500.75){
+                hearts.x -= speed;
+            }
         }
         else {
             zordo.animations.stop('walk');
