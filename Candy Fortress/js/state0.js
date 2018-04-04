@@ -3,15 +3,16 @@ var demo = {};
 var centerX = 1500 / 2;
 var centerY = 1000 / 2;
 var speed = 5;
+
+// initialize player
 var zordo;
 var gooblin;
 
 demo.state0 = function(){};
 demo.state0.prototype = {
     preload: function(){
-        game.load.spritesheet('zordo', 'assets/Sprites/ZordoFightsheet.png', 125, 138);
-        game.load.image('sky', 'assets/levels/1-1.png');
-        game.load.image('gooblin', 'assets/Sprites/Gooblin.png');
+        game.load.spritesheet('player', 'assets/Sprites/gold-king.png', 126, 162);
+        game.load.image('sky', 'assets/Haydrool.png');
     },
     create: function(){
         
@@ -30,7 +31,7 @@ demo.state0.prototype = {
 //        gooblin = game.add.sprite(centerX - 100, centerY - 100, 'gooblin');
         // initialize zordo into the world.
         zordo = game.add.sprite(centerX, centerY, 'zordo');
-        zordo.animations.add('walk', [0, 1, 2, 3, 4, 5, 6]);
+        zordo.animations.add('walk', [1, 2]);
         // anchor x/y of the image to the center, not the top left.
         zordo.anchor.setTo(0.5, 0.5);
         // set zordo's scale
@@ -55,9 +56,22 @@ demo.state0.prototype = {
     update: function(){
         
 
-        if (zordo.x >= 2900){
-            game.state.start('state1');
-        }
+while (gooblin.y !== zordo.y && gooblin.x !== zordo.x){
+    if (gooblin.y >= zordo.y){
+        gooblin.y -= speed;
+    } else {
+        gooblin.y += speed;
+    }
+    
+    if (gooblin.x >= zordo.x){
+        gooblin.x -= speed;
+    } else {
+        gooblin.x += speed;
+    }
+
+}
+
+        
         
         if(game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)){
         zordo.animations.play('walk', 20, true);
@@ -90,7 +104,7 @@ demo.state0.prototype = {
 
 
 function changeState(i, stateNum){
-    console.log(i); // the first parameter is the gobbly gook phaser sends
+    console.log("state"+ stateNum);
     game.state.start('state' + stateNum);
 }
 
